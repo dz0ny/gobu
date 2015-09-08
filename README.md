@@ -1,10 +1,10 @@
 # gobu
-Painless bootstrapping of golang. It downloads ands installs GO,
+Painless bootstrapping of golang. It downloads and installs GO,
 sets GOROOT, GOPATH or GO15VENDOREXPERIMENT and runs default shell.
 ```
 Usage of gobu:
   -env_path string
-    	Location of golang instalation (default "/home/dz0ny/.gobu")
+    	Location of golang installation (default "/home/dz0ny/.gobu")
   -vendor
     	Start with GO15VENDOREXPERIMENT
   -version string
@@ -15,9 +15,9 @@ You can find compiled binaries for your platform under "Releases"
 
 
 ## What it does
-Download latest version from releases and run it in shell. After the GO is
+Downloads latest version from releases and runs it in shell. After the GO is
 bootstrapped you will end up in shell with "Vendoring" enabled and with fresh
-env setup for you.
+env set up for you.
 
 ## Why
 Because I hate setting environment every time for every project.
