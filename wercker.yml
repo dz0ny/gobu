@@ -36,4 +36,4 @@ deploy:
     - script:
         name: Deploy to GitHub
         code: |
-          make prepare compile upload
+          make

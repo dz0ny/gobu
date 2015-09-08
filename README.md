@@ -1,4 +1,6 @@
 # gobu
+[![wercker status](https://app.wercker.com/status/db2136ecdcb6c98f23d442af3d42e7d8/m "wercker status")](https://app.wercker.com/project/bykey/db2136ecdcb6c98f23d442af3d42e7d8)
+
 Painless bootstrapping of golang. It downloads and installs GO,
 sets GOROOT, GOPATH or GO15VENDOREXPERIMENT and runs default shell.
 ```

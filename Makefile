@@ -1,3 +1,5 @@
+all: prepare build upload
+
 prepare:
 	go get github.com/aktau/github-release
 
