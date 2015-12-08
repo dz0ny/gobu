@@ -12,18 +12,18 @@ upload:
 	github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.0 \
+	    --tag v0.1.2 \
 	    --name "gobu-linux-amd64" \
 	    --file gobu-linux-amd64
 	github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.0 \
+	    --tag v0.1.2 \
 	    --name "gobu-darwin-amd64" \
 	    --file gobu-darwin-amd64
 	github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.0 \
+	    --tag v0.1.2 \
 	    --name "gobu-windows-amd64.exe" \
 	    --file gobu-windows-amd64.exe
