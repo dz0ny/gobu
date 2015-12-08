@@ -16,7 +16,7 @@ import (
 )
 
 var env_path = ".gobu"
-var global_version = "1.5"
+var global_version = "1.5.2"
 var online_path = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
 var use_vendoring = false
 
