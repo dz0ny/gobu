@@ -5,34 +5,52 @@ box: google/golang
 build:
   # The steps that will be executed on build
   steps:
-
-    # Sets the go workspace and places you package
-    # at the right place in the workspace tree
-    - setup-go-workspace
-
-    # golint step!
-    - wercker/golint
+    - script:
+        name: setup env
+        code: |
+            apt-get update -yq
+            apt-get install mercurial -yq --force-yes
+            export GOROOT=/usr/local/go
+            export GOPATH=$(pwd)
+            export GO15VENDOREXPERIMENT=1
+            go env
 
     # Gets the dependencies
     - script:
         name: go get
         code: |
-          go get
+          make prepare
 
     # Build the project
     - script:
         name: go build
         code: |
-          go build ./...
+          make build
 
     # Test the project
     - script:
         name: go test
         code: |
-          go test ./...
+          go test gobu
 
 deploy:
   steps:
+    - script:
+        name: setup env
+        code: |
+            apt-get update -yq
+            apt-get install mercurial -yq --force-yes
+            export GOROOT=/usr/local/go
+            export GOPATH=$(pwd)
+            export GO15VENDOREXPERIMENT=1
+            go env
+
+    # Gets the dependencies
+    - script:
+        name: go get
+        code: |
+          make prepare
+
     - script:
         name: Deploy to GitHub
         code: |

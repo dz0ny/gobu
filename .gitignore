@@ -22,3 +22,10 @@ _testmain.go
 *.exe
 *.test
 *.prof
+bin
+pkg
+src/github.com
+gobu
+gobu-linux-amd64
+gobu-darwin-amd64
+gobu-windows-amd64.exe

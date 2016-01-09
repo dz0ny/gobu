@@ -1,19 +1,42 @@
 # gobu
 [![wercker status](https://app.wercker.com/status/db2136ecdcb6c98f23d442af3d42e7d8/m "wercker status")](https://app.wercker.com/project/bykey/db2136ecdcb6c98f23d442af3d42e7d8)
 
-Painless bootstrapping of golang. It downloads and installs GO,
-sets GOROOT, GOPATH or GO15VENDOREXPERIMENT and runs default shell.
+Painless bootstrapping of golang. It downloads and installs GO for your OS
+and arhitecture, sets GOROOT, GOPATH or GO15VENDOREXPERIMENT and runs default
+ shell.
 ```
-Usage of gobu:
+Usage of ./gobu-linux-amd64:
+  -GOPATH string
+    	Overide GOPATH
   -env_path string
-    	Location of golang installation (default "/home/dz0ny/.gobu")
+    	Location of GO instalation (default "/home/dz0ny/.gobu")
   -vendor
     	Start with GO15VENDOREXPERIMENT
   -version string
-    	Version of golang you wish to use (default "1.5")
+    	Version of Golang you wish to use (default "1.5.2")
 ```
 
 You can find compiled binaries for your platform under "Releases"
+
+## Example starting new project
+
+```
+mkdir -p project/src/hello_world
+cd project
+gobu -GOPATH $(pwd) -vendor
+
+cat src/hello_world/main.go
+
+package main
+
+import "fmt"
+func main() {
+    fmt.Println("hello world")
+}
+
+go build hello_world
+
+```
 
 
 ## What it does

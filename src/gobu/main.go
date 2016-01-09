@@ -15,12 +15,13 @@ import (
 	"strings"
 )
 
-var env_path = ".gobu"
-var global_version = "1.5.2"
-var online_path = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
-var use_vendoring = false
+var goPath = ""
+var envPath = ".gobu"
+var globalVersion = "1.5.2"
+var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
+var useVendoring = false
 
-func UserHomeDir() string {
+func userHomeDir() string {
 	if runtime.GOOS == "windows" {
 		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
 		if home == "" {
@@ -32,10 +33,11 @@ func UserHomeDir() string {
 }
 
 func init() {
-	env_path = filepath.Join(UserHomeDir(), env_path)
-	flag.StringVar(&env_path, "env_path", env_path, "Location of GO instalation")
-	flag.StringVar(&global_version, "version", "1.5", "Version of Golang you wish to use")
-	flag.BoolVar(&use_vendoring, "vendor", false, "Start with GO15VENDOREXPERIMENT")
+	envPath = filepath.Join(userHomeDir(), envPath)
+	flag.StringVar(&envPath, "env_path", envPath, "Location of GO instalation")
+	flag.StringVar(&globalVersion, "version", globalVersion, "Version of Golang you wish to use")
+	flag.StringVar(&goPath, "GOPATH", goPath, "Overide GOPATH")
+	flag.BoolVar(&useVendoring, "vendor", false, "Start with GO15VENDOREXPERIMENT")
 }
 
 func untar(source, target string) {
@@ -109,12 +111,12 @@ func untar(source, target string) {
 
 }
 
-func CreateStore(version string) {
-	os.MkdirAll(filepath.Join(env_path, version), 0755)
-	os.MkdirAll(filepath.Join(env_path, version, "local"), 0755)
+func createStore(version string) {
+	os.MkdirAll(filepath.Join(envPath, version), 0755)
+	os.MkdirAll(filepath.Join(envPath, version, "local"), 0755)
 }
 
-func Run(version string) {
+func run(version string) {
 
 	if os.Getenv("GOBU") != "" {
 		log.Fatalln("Already in boostraped env!")
@@ -128,20 +130,21 @@ func Run(version string) {
 	if err != nil {
 		log.Panic(err)
 	}
-	gopath := filepath.Join(env_path, version, "local")
-	goroot := filepath.Join(env_path, version, "go")
+
+	if goPath == "" {
+		goPath = filepath.Join(envPath, version, "local")
+	}
+	goroot := filepath.Join(envPath, version, "go")
 
 	os.Setenv("GOBU", "1")
-	if use_vendoring {
+	if useVendoring {
 		os.Setenv("GO15VENDOREXPERIMENT", "1")
-	} else {
-		os.Setenv("GOPATH", gopath)
 	}
-
+	os.Setenv("GOPATH", goPath)
 	os.Setenv("GOROOT", goroot)
 
 	// Sometimes we want to use tools from local install
-	os.Setenv("PATH", gopath+"/bin:"+goroot+"/bin:"+path)
+	os.Setenv("PATH", goPath+"/bin:"+goroot+"/bin:"+path)
 
 	pa := os.ProcAttr{
 		Files: []*os.File{os.Stdin, os.Stdout, os.Stderr},
@@ -172,16 +175,16 @@ func Run(version string) {
 	log.Printf("Exited gobu shell: %s", state.String())
 }
 
-func Download(version string) {
-	local := filepath.Join(env_path, version+".tar.gz")
-	target := filepath.Join(env_path, version)
+func download(version string) {
+	local := filepath.Join(envPath, version+".tar.gz")
+	target := filepath.Join(envPath, version)
 	if _, err := os.Stat(local); os.IsNotExist(err) {
 		log.Printf("Local path: %s", local)
-		log.Printf("Online path: %s", online_path)
+		log.Printf("Online path: %s", onlinePath)
 		log.Printf("Target path: %s", target)
 		out, _ := os.Create(local)
 		defer out.Close()
-		resp, _ := http.Get(online_path)
+		resp, _ := http.Get(onlinePath)
 		defer resp.Body.Close()
 		io.Copy(out, resp.Body)
 		untar(local, target)
@@ -193,9 +196,9 @@ func Download(version string) {
 func main() {
 	flag.Parse()
 
-	online_path = fmt.Sprintf(online_path, global_version, runtime.GOOS, runtime.GOARCH)
+	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, runtime.GOARCH)
 
-	CreateStore(global_version)
-	Download(global_version)
-	Run(global_version)
+	createStore(globalVersion)
+	download(globalVersion)
+	run(globalVersion)
 }
