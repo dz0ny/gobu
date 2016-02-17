@@ -16,13 +16,13 @@ upload:
 	bin/github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.2 \
+	    --tag v0.1.6 \
 	    --name "gobu-linux-amd64" \
 	    --file gobu-linux-amd64
 	bin/github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.2 \
+	    --tag v0.1.6 \
 	    --name "gobu-darwin-amd64" \
 	    --file gobu-darwin-amd64
 	bin/github-release upload \
