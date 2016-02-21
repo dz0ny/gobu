@@ -1,5 +1,6 @@
 # gobu
 [![wercker status](https://app.wercker.com/status/db2136ecdcb6c98f23d442af3d42e7d8/m "wercker status")](https://app.wercker.com/project/bykey/db2136ecdcb6c98f23d442af3d42e7d8)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dz0ny/gobu)](https://goreportcard.com/report/github.com/dz0ny/gobu)
 
 Painless bootstrapping of golang. It downloads and installs GO for your OS
 and arhitecture, sets GOROOT, GOPATH or GO15VENDOREXPERIMENT and runs default
