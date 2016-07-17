@@ -17,15 +17,16 @@ build:
 
     # Build the project
     - script:
-        name: go build
+        name: Prepare
         code: |
-          make build
+          make setup
 
     # Test the project
     - script:
-        name: go test
+        name: Test
         code: |
-          go test gobu
+          make lint
+          make build
 
 deploy:
   steps:
@@ -43,7 +44,8 @@ deploy:
     - script:
         name: Compile
         code: |
-          make
+          make setup
+          make build
 
     - script:
         name: Deploy to GitHub

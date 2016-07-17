@@ -15,7 +15,7 @@ import (
 var goPath = ""
 var execCmd = ""
 var envPath = ".gobu"
-var globalVersion = ""
+var globalVersion = "1.6.2"
 var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
 
 func userHomeDir() string {
@@ -108,8 +108,12 @@ func run(version, cmd string, cmdArgs []string) *os.ProcessState {
 
 func main() {
 	flag.Parse()
-
-	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, runtime.GOARCH)
+	arch := runtime.GOARCH
+	// Fix for special case of arm version naming
+	if arch == "arm" {
+		arch = "armv6l"
+	}
+	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch)
 
 	createStore(globalVersion)
 	download(globalVersion)

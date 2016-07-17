@@ -1,7 +1,13 @@
 GOVERSION := 1.6.2
-VERSION := 0.6.2-1
+VERSION := 0.6.2-2
 
-all: build
+all: setup build lint
+
+setup:
+	go get github.com/aktau/github-release
+	go get github.com/alecthomas/gometalinter
+	go get -v -d gobu
+	bin/gometalinter --install --update
 
 clean:
 	rm -f gobu
@@ -9,18 +15,20 @@ clean:
 	rm -rf bin
 	find src/* -maxdepth 0 ! -name 'gobu' -type d | xargs rm -rf
 
+lint:
+	bin/gometalinter --fast --disable=gotype --cyclo-over=15 src/gobu/...
+	find src/gobu -name '*.go' | xargs gofmt -w -s
+
 build:
-	go get -v -d gobu
 	env GOOS=linux GOARCH=arm go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Linux-armv7l gobu
 	env GOOS=linux GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Linux-x86_64 gobu
 	env GOOS=darwin GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Darwin-x86_64 gobu
 	env GOOS=windows GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Windows-x86_64.exe gobu
 
 install:
-	sudo mv gobu-linux-amd64 /usr/sbin/gobu
+	sudo mv gobu-`uname -s`-`uname -m` /usr/local/bin/gobu
 
 upload:
-	go get github.com/aktau/github-release
 	bin/github-release upload \
 			--user dz0ny \
 			--repo gobu \
