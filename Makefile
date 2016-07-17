@@ -1,5 +1,5 @@
 GOVERSION := 1.6.2
-VERSION := 0.6.2-1
+VERSION := 0.6.2-2
 
 all: build
 
