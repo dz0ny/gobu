@@ -26,6 +26,7 @@ bin
 pkg
 src/github.com
 gobu
+gobu-linux-arm
 gobu-linux-amd64
 gobu-darwin-amd64
 gobu-windows-amd64.exe

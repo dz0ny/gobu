@@ -1,33 +1,53 @@
-all: prepare build upload
+GOVERSION := 1.6.2
+VERSION := 0.6.2-1
 
-prepare:
-	go get github.com/aktau/github-release
-	go get gobu
+all: build
+
+clean:
+	rm -f gobu
+	rm -rf pkg
+	rm -rf bin
+	find src/* -maxdepth 0 ! -name 'gobu' -type d | xargs rm -rf
 
 build:
-	env GOOS=linux GOARCH=amd64 go build -o gobu-linux-amd64 gobu
-	env GOOS=darwin GOARCH=amd64 go build -o gobu-darwin-amd64 gobu
-	env GOOS=windows GOARCH=amd64 go build -o gobu-windows-amd64.exe gobu
+	go get -v -d gobu
+	env GOOS=linux GOARCH=arm go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Linux-armv7l gobu
+	env GOOS=linux GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Linux-x86_64 gobu
+	env GOOS=darwin GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Darwin-x86_64 gobu
+	env GOOS=windows GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Windows-x86_64.exe gobu
 
-install: build
+install:
 	sudo mv gobu-linux-amd64 /usr/sbin/gobu
 
 upload:
+	go get github.com/aktau/github-release
+	bin/github-release upload \
+			--user dz0ny \
+			--repo gobu \
+			--tag "v$(VERSION)" \
+			--name "gobu-Linux-armv6l" \
+			--file gobu-Linux-armv7l
 	bin/github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.6 \
-	    --name "gobu-linux-amd64" \
-	    --file gobu-linux-amd64
+	    --tag "v$(VERSION)" \
+	    --name "gobu-Linux-armv7l" \
+	    --file gobu-Linux-armv7l
 	bin/github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.6 \
-	    --name "gobu-darwin-amd64" \
-	    --file gobu-darwin-amd64
+	    --tag "v$(VERSION)" \
+	    --name "gobu-Linux-x86_64" \
+	    --file gobu-Linux-x86_64
 	bin/github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
-	    --tag v0.1.6 \
-	    --name "gobu-windows-amd64.exe" \
-	    --file gobu-windows-amd64.exe
+	    --tag "v$(VERSION)" \
+	    --name "gobu-Darwin-x86_64" \
+	    --file gobu-Darwin-x86_64
+	bin/github-release upload \
+	    --user dz0ny \
+	    --repo gobu \
+	    --tag "v$(VERSION)" \
+	    --name "gobu-Windows-x86_64.exe" \
+	    --file gobu-Windows-x86_64.exe
