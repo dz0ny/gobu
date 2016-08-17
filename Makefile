@@ -1,5 +1,5 @@
-GOVERSION := 1.6.2
-VERSION := 0.6.2-2
+GOVERSION := 1.7.0
+VERSION := 0.7.0
 
 all: setup build lint
 
