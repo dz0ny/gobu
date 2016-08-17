@@ -15,7 +15,7 @@ import (
 var goPath = ""
 var execCmd = ""
 var envPath = ".gobu"
-var globalVersion = "1.6.2"
+var globalVersion = "1.7.0"
 var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
 
 func userHomeDir() string {

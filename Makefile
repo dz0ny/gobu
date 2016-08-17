@@ -1,5 +1,5 @@
-GOVERSION := 1.6.2
-VERSION := 0.6.2-2
+GOVERSION := 1.7.0
+VERSION := 0.7.0
 
 all: setup build lint
 
@@ -16,7 +16,7 @@ clean:
 	find src/* -maxdepth 0 ! -name 'gobu' -type d | xargs rm -rf
 
 lint:
-	bin/gometalinter --fast --disable=gotype --cyclo-over=15 src/gobu/...
+	bin/gometalinter --fast --disable=gotype --disable=gas --cyclo-over=15 src/gobu/...
 	find src/gobu -name '*.go' | xargs gofmt -w -s
 
 build:
