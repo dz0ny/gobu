@@ -17,7 +17,13 @@ func download(version string) {
 		log.Printf("Target path: %s", target)
 		out, _ := os.Create(local)
 		defer out.Close()
-		resp, _ := http.Get(onlinePath)
+		resp, err := http.Get(onlinePath)
+		if resp.StatusCode > 400 {
+			log.Fatalf("go toolchain download: %s is not there", onlinePath)
+		}
+		if err != nil {
+			log.Fatalf("go toolchain download: %v", err)
+		}
 		defer resp.Body.Close()
 		io.Copy(out, resp.Body)
 		untar(local, target)
