@@ -13,14 +13,14 @@ Usage of gobu:
   -exec string
     	Run command instead of default shell
   -version string
-    	Version of Golang you wish to use (default "1.7.0")
+    	Version of Golang you wish to use (default "1.7")
 
 ```
 
 You can find compiled binaries for your platform under "Releases" or if you prefer quick install:
 
 ```
-$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.0/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
+$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.1/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
 $ chmod +x /usr/local/bin/gobu
 ```
 
