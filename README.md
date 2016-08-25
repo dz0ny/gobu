@@ -27,11 +27,13 @@ $ chmod +x /usr/local/bin/gobu
 ## Example starting new project
 
 ```
-mkdir -p project/src/hello_world
-cd project
-gobu
-
-cat src/hello_world/main.go
+$ mkdir -p project/src/hello_world
+$ cd project
+$ gobu
+2016/08/25 09:55:52 >> You are now in a new GOBU shell. To exit, type 'exit'
+2016/08/25 09:55:52 GOPATH /home/dz0ny/project
+2016/08/25 09:55:52 GOROOT /home/dz0ny/.gobu/1.7/go
+$ nano src/hello_world/main.go
 
 package main
 
@@ -40,7 +42,13 @@ func main() {
     fmt.Println("hello world")
 }
 
-go build hello_world
+$ go build hello_world
+$ tree
+.
+├── hello_world
+└── src
+    └── hello_world
+        └── main.go
 
 ```
 
