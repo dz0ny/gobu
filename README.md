@@ -29,7 +29,7 @@ $ chmod +x /usr/local/bin/gobu
 ```
 mkdir -p project/src/hello_world
 cd project
-gobu -GOPATH $(pwd)
+gobu
 
 cat src/hello_world/main.go
 
