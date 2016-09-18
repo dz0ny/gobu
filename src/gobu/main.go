@@ -16,7 +16,7 @@ var goPath = ""
 var execCmd = ""
 var envPath = ".gobu"
 var globalVersion = "1.7"
-var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
+var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.%s"
 
 func userHomeDir() string {
 	if runtime.GOOS == "windows" {
@@ -88,7 +88,7 @@ func run(version, cmd string, cmdArgs []string) *os.ProcessState {
 	log.Println("GOROOT", goroot)
 	// Sometimes we want to use tools from local install
 	os.Setenv("PATH", goPath+"/bin:"+goroot+"/bin:"+path)
-
+	
 	pa := os.ProcAttr{
 		Files: []*os.File{os.Stdin, os.Stdout, os.Stderr},
 		Dir:   cwd,
@@ -113,7 +113,14 @@ func main() {
 	if arch == "arm" {
 		arch = "armv6l"
 	}
-	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch)
+	
+	extension := ".tar.gz"
+	
+	if runtime.GOOS == "windows" {
+		extension = ".zip"
+	}
+	
+	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch, extension)
 
 	createStore(globalVersion)
 	download(globalVersion)
