@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 func download(version string) {
@@ -26,7 +27,12 @@ func download(version string) {
 		}
 		defer resp.Body.Close()
 		io.Copy(out, resp.Body)
-		untar(local, target)
+
+		if runtime.GOOS == "windows" {
+			unzip(local, target)
+		} else {
+			untar(local, target)
+		}
 	} else {
 		log.Printf("Skipping download")
 	}
