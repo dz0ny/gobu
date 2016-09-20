@@ -114,10 +114,10 @@ func main() {
 		arch = "armv6l"
 	}
 	
-	extension := ".tar.gz"
+	extension := "tar.gz"
 	
 	if runtime.GOOS == "windows" {
-		extension = ".zip"
+		extension = "zip"
 	}
 	
 	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch, extension)
