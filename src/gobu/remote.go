@@ -10,7 +10,14 @@ import (
 )
 
 func download(version string) {
-	local := filepath.Join(envPath, version+".tar.gz")
+
+	extension := ".tar.gz"
+
+	if runtime.GOOS == "windows" {
+		extension = ".zip"
+	}
+
+	local := filepath.Join(envPath, version+extension)
 	target := filepath.Join(envPath, version)
 	if _, err := os.Stat(local); os.IsNotExist(err) {
 		log.Printf("Local path: %s", local)
