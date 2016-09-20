@@ -9,20 +9,20 @@ import (
 "strings"
 )
 
-func untar(source, target string) {
+func zip(source, target string) {
 
-r, err := zip.OpenReader(source)
+	r, err := zip.OpenReader(source)
 
-if err != nil {
-        log.Fatal(err)
-}
+	if err != nil {
+		log.Fatal(err)
+	}
 
-defer r.Close()
+	defer r.Close()
 
-for _, f := range r.File {
+	for _, f := range r.File {
 
-        fmt.Printf("%v", f)
-}
+		fmt.Printf("%v", f)
+	}
 
 
 }
