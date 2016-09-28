@@ -57,11 +57,10 @@ func runShell(version string) {
 
 	log.Println(">> You are now in a new GOBU shell. To exit, type 'exit'")
 
-	defaultShell := resolveBinary(os.Getenv("SHELL"))
+	shell := os.Getenv("SHELL")
 
 	if runtime.GOOS == "windows" {
 
-		// TODO go-ps get parent process for windows
 		parentId := os.Getppid()
 
 		fmt.Println(parentId)
@@ -73,10 +72,12 @@ func runShell(version string) {
 		}
 
 		exe := parentProcess.Executable()
-		defaultShell = exe
+		shell = exe
 	}
 
-	run(version, defaultShell, []string{defaultShell})
+	shellBinary := resolveBinary(shell)
+
+	run(version, shellBinary, []string{shellBinary})
 	log.Println("Exited gobu shell")
 }
 
