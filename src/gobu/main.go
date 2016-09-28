@@ -65,16 +65,13 @@ func runShell(version string) {
 
 		parentId := os.Getppid()
 
-		fmt.Println(parentId)
-
 		parentProcess, err := ps.FindProcess(parentId)
 
 		if err != nil {
 			log.Panic(err)
 		}
 
-		exe := parentProcess.Executable()
-		shell = exe
+		shell = parentProcess.Executable()
 	}
 
 	shellBinary := resolveBinary(shell)
