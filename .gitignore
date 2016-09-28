@@ -24,6 +24,6 @@ _testmain.go
 *.prof
 bin
 pkg
-#src/*
-#gobu
+src/*
+gobu
 gobu-*

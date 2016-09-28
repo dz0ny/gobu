@@ -56,9 +56,9 @@ func runShell(version string) {
 
 	log.Println(">> You are now in a new GOBU shell. To exit, type 'exit'")
 	defaultShell := resolveBinary(os.Getenv("SHELL"))
-	
+
 	if runtime.GOOS == "windows" {
-	
+
 		defaultShell = "cmd.exe" // TODO find parent process name
 	}
 
@@ -93,7 +93,7 @@ func run(version, cmd string, cmdArgs []string) *os.ProcessState {
 	log.Println("GOROOT", goroot)
 	// Sometimes we want to use tools from local install
 	os.Setenv("PATH", goPath+"/bin:"+goroot+"/bin:"+path)
-	
+
 	pa := os.ProcAttr{
 		Files: []*os.File{os.Stdin, os.Stdout, os.Stderr},
 		Dir:   cwd,
@@ -118,13 +118,13 @@ func main() {
 	if arch == "arm" {
 		arch = "armv6l"
 	}
-	
+
 	extension := "tar.gz"
-	
+
 	if runtime.GOOS == "windows" {
 		extension = "zip"
 	}
-	
+
 	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch, extension)
 
 	createStore(globalVersion)
