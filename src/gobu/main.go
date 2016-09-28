@@ -10,6 +10,7 @@ import (
 	"runtime"
 
 	"github.com/gpahal/shlex"
+	"github.com/mitchellh/go-ps"
 )
 
 var goPath = ""
@@ -55,11 +56,24 @@ func runShell(version string) {
 	os.Setenv("GOBU", "1")
 
 	log.Println(">> You are now in a new GOBU shell. To exit, type 'exit'")
+
 	defaultShell := resolveBinary(os.Getenv("SHELL"))
 
 	if runtime.GOOS == "windows" {
 
-		defaultShell = "cmd.exe" // TODO find parent process name
+		// TODO go-ps get parent process for windows
+		parentId := os.Getppid()
+
+		fmt.Println(parentId)
+
+		parentProcess, err := ps.FindProcess(parentId)
+
+		if err != nil {
+			log.Panic(err)
+		}
+
+		exe := parentProcess.Executable()
+		defaultShell = exe
 	}
 
 	run(version, defaultShell, []string{defaultShell})
