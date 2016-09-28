@@ -145,7 +145,7 @@ func main() {
 	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch, extension)
 
 	createStore(globalVersion)
-	download(globalVersion)
+	download(globalVersion, extension)
 	if execCmd != "" {
 		execCmdParsed, err := shlex.Split(execCmd)
 		if err != nil {

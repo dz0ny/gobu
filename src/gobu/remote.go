@@ -9,13 +9,7 @@ import (
 	"runtime"
 )
 
-func download(version string) {
-
-	extension := ".tar.gz"
-
-	if runtime.GOOS == "windows" {
-		extension = ".zip"
-	}
+func download(version string, extension string) {
 
 	local := filepath.Join(envPath, version+extension)
 	target := filepath.Join(envPath, version)
