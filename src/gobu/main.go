@@ -17,7 +17,9 @@ var goPath = ""
 var execCmd = ""
 var envPath = ".gobu"
 var globalVersion = "1.7"
-var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.%s"
+var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s%s"
+var unixExtension = ".tar.gz"
+var winExtension = ".zip"
 
 func userHomeDir() string {
 	if runtime.GOOS == "windows" {
@@ -134,10 +136,10 @@ func main() {
 		arch = "armv6l"
 	}
 
-	extension := "tar.gz"
+	extension := unixExtension
 
 	if runtime.GOOS == "windows" {
-		extension = "zip"
+		extension = winExtension
 	}
 
 	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch, extension)
