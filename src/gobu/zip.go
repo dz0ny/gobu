@@ -1,11 +1,11 @@
 package main
 
 import (
-"archive/zip"
-"io"
-"log"
-"os"
-"path/filepath"
+	"archive/zip"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
 )
 
 func unzip(source, target string) {
@@ -23,11 +23,11 @@ func unzip(source, target string) {
 		log.Fatal(err)
 	}
 
-
 	for _, file := range r.File {
 
 		path := filepath.Join(target, file.Name)
 		if file.FileInfo().IsDir() {
+			log.Println("Creating directory :", file.Name)
 			os.MkdirAll(path, file.Mode())
 			continue
 		}
@@ -46,12 +46,13 @@ func unzip(source, target string) {
 
 		defer targetFile.Close()
 
+		log.Println("Unzipping :", file.Name)
+
 		if _, err := io.Copy(targetFile, fileReader); err != nil {
 
 			log.Fatal(err)
 		}
 
 	}
-
 
 }
