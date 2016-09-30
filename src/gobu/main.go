@@ -15,6 +15,7 @@ import (
 var goPath = ""
 var execCmd = ""
 var envPath = ".gobu"
+var available = false
 var globalVersion = "1.7"
 var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
 
@@ -41,6 +42,7 @@ func init() {
 	flag.StringVar(&globalVersion, "version", globalVersion, "Version of Golang you wish to use")
 	flag.StringVar(&goPath, "GOPATH", goPath, "Overide GOPATH")
 	flag.StringVar(&execCmd, "exec", "", "Run command instead of default shell")
+	flag.BoolVar(&available, "available", false, "List available stable versions")
 }
 
 func createStore(version string) {
@@ -114,6 +116,14 @@ func main() {
 		arch = "armv6l"
 	}
 	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch)
+
+	if available {
+		versions := availableVersions()
+		for _, version := range versions {
+			fmt.Println(version[2:])
+		}
+		return
+	}
 
 	createStore(globalVersion)
 	download(globalVersion)

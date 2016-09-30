@@ -8,6 +8,8 @@ and architecture, sets GOROOT, GOPATH and runs default shell or your command.
 Usage of gobu:
   -GOPATH string
     	Overide GOPATH (default "/home/username/gobu")
+  -available
+      List available stable versions
   -env_path string
     	Location of GO instalation (default "/home/username/.gobu")
   -exec string
