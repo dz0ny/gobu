@@ -6,10 +6,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
-func download(version string) {
-	local := filepath.Join(envPath, version+".tar.gz")
+func download(version string, extension string) {
+
+	local := filepath.Join(envPath, version+extension)
 	target := filepath.Join(envPath, version)
 	if _, err := os.Stat(local); os.IsNotExist(err) {
 		log.Printf("Local path: %s", local)
@@ -26,7 +28,12 @@ func download(version string) {
 		}
 		defer resp.Body.Close()
 		io.Copy(out, resp.Body)
-		untar(local, target)
+
+		if runtime.GOOS == "windows" {
+			unzip(local, target)
+		} else {
+			untar(local, target)
+		}
 	} else {
 		log.Printf("Skipping download")
 	}
