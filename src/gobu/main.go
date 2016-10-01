@@ -10,6 +10,7 @@ import (
 	"runtime"
 
 	"github.com/gpahal/shlex"
+	"github.com/mitchellh/go-ps"
 )
 
 var goPath = ""
@@ -17,7 +18,9 @@ var execCmd = ""
 var envPath = ".gobu"
 var available = false
 var globalVersion = "1.7"
-var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s.tar.gz"
+var onlinePath = "https://storage.googleapis.com/golang/go%s.%s-%s%s"
+var unixExtension = ".tar.gz"
+var winExtension = ".zip"
 
 func userHomeDir() string {
 	if runtime.GOOS == "windows" {
@@ -57,9 +60,25 @@ func runShell(version string) {
 	os.Setenv("GOBU", "1")
 
 	log.Println(">> You are now in a new GOBU shell. To exit, type 'exit'")
-	defaultShell := resolveBinary(os.Getenv("SHELL"))
 
-	run(version, defaultShell, []string{defaultShell})
+	shell := os.Getenv("SHELL")
+
+	if runtime.GOOS == "windows" {
+
+		parentId := os.Getppid()
+
+		parentProcess, err := ps.FindProcess(parentId)
+
+		if err != nil {
+			log.Panic(err)
+		}
+
+		shell = parentProcess.Executable()
+	}
+
+	shellBinary := resolveBinary(shell)
+
+	run(version, shellBinary, []string{shellBinary})
 	log.Println("Exited gobu shell")
 }
 
@@ -115,7 +134,14 @@ func main() {
 	if arch == "arm" {
 		arch = "armv6l"
 	}
-	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch)
+
+	extension := unixExtension
+
+	if runtime.GOOS == "windows" {
+		extension = winExtension
+	}
+
+	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch, extension)
 
 	if available {
 		versions := availableVersions(goDownloadPage())
@@ -126,7 +152,7 @@ func main() {
 	}
 
 	createStore(globalVersion)
-	download(globalVersion)
+	download(globalVersion, extension)
 	if execCmd != "" {
 		execCmdParsed, err := shlex.Split(execCmd)
 		if err != nil {
