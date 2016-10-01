@@ -118,7 +118,7 @@ func main() {
 	onlinePath = fmt.Sprintf(onlinePath, globalVersion, runtime.GOOS, arch)
 
 	if available {
-		versions := availableVersions()
+		versions := availableVersions(goDownloadPage())
 		for _, version := range versions {
 			fmt.Println(version[2:])
 		}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -37,7 +38,7 @@ func download(version string) {
 	}
 }
 
-func availableVersions() []string {
+func goDownloadPage() io.Reader {
 	client := &http.Client{Timeout: time.Duration(5 * time.Second)}
 	req, err := http.NewRequest("GET", "https://golang.org/dl/", nil)
 
@@ -56,11 +57,18 @@ func availableVersions() []string {
 
 	defer resp.Body.Close()
 
+	var buf bytes.Buffer
+	(&buf).ReadFrom(resp.Body)
+
+	return &buf
+}
+
+func availableVersions(stream io.Reader) []string {
 	var line string
 	var parts []string
 	var versions []string
 
-	scanner := bufio.NewScanner(resp.Body)
+	scanner := bufio.NewScanner(stream)
 
 	for scanner.Scan() {
 		line = scanner.Text()
@@ -78,8 +86,8 @@ func availableVersions() []string {
 	return versions
 }
 
-func latestVersion() string {
-	var versions []string = availableVersions()
+func latestVersion(stream io.Reader) string {
+	var versions []string = availableVersions(stream)
 
 	if len(versions) > 0 {
 		return versions[0]
@@ -88,8 +96,8 @@ func latestVersion() string {
 	return ""
 }
 
-func latestVersionUrl() string {
-	var versions []string = availableVersions()
+func latestVersionUrl(stream io.Reader) string {
+	var versions []string = availableVersions(stream)
 	var tpl string = "https://storage.googleapis.com/golang/%s.%s-%s.tar.gz"
 
 	if len(versions) > 0 {
