@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 )
 
 func download(version string) {
@@ -37,7 +38,7 @@ func download(version string) {
 }
 
 func availableVersions() []string {
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Duration(5 * time.Second)}
 	req, err := http.NewRequest("GET", "https://golang.org/dl/", nil)
 
 	req.Header.Set("Accept", "text/html,application/xhtml+xml,*/*;q=0.8")
