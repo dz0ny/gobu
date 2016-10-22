@@ -1,58 +1,60 @@
-package main
+package archive
 
 import (
 	"archive/zip"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-func unzip(source, target string) {
+// Unzip unpacks .zip archive
+func Unzip(source, target string) error {
 
 	r, err := zip.OpenReader(source)
-
+	if err != nil {
+		return err
+	}
 	defer r.Close()
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	if err := os.MkdirAll(target, 0755); err != nil {
-
-		log.Fatal(err)
+		return err
 	}
 
 	for _, file := range r.File {
 
 		path := filepath.Join(target, file.Name)
 		if file.FileInfo().IsDir() {
-			log.Println("Creating directory :", file.Name)
+			log.Debugln("Creating directory :", file.Name)
 			os.MkdirAll(path, file.Mode())
 			continue
 		}
 
 		fileReader, err := file.Open()
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 
 		defer fileReader.Close()
 
 		targetFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 
 		defer targetFile.Close()
 
-		log.Println("Unzipping :", file.Name)
+		log.Debugln("Unzipping :", file.Name)
 
 		if _, err := io.Copy(targetFile, fileReader); err != nil {
-
-			log.Fatal(err)
+			return err
 		}
 
 	}
-
+	return nil
 }

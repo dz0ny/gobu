@@ -6,23 +6,33 @@ Painless bootstrapping of GOlang. It downloads and installs GO for your OS
 and architecture, sets GOROOT, GOPATH and runs default shell or your command.
 ```
 Usage of gobu:
-  -GOPATH string
-    	Overide GOPATH (default "/home/username/gobu")
-  -available
-      List available stable versions
-  -env_path string
-    	Location of GO instalation (default "/home/username/.gobu")
-  -exec string
-    	Run command instead of default shell
-  -version string
-    	Version of Golang you wish to use (default "1.7")
+usage: gobu [<flags>] <command> [<args> ...]
+
+Bootstrap your GOlang enviroment
+
+Flags:
+  --help     Show context-sensitive help (also try --help-long and --help-man).
+  --debug    Verbose mode.
+  --version  Show application version.
+
+Commands:
+  help [<command>...]
+    Show help.
+
+  shell* [<flags>]
+    Start a shell with Golang enviroment.
+
+  versions
+    List of all supported Golang releases.
+
+
 
 ```
 
 You can find compiled binaries for your platform under "Releases" or if you prefer quick install:
 
 ```
-$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.1/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
+$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.2/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
 $ chmod +x /usr/local/bin/gobu
 ```
 

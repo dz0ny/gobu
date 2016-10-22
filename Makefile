@@ -1,12 +1,11 @@
-GOVERSION := 1.7
-VERSION := 0.7.1
+VERSION := 0.7.2
 
 all: setup build lint
 
 setup:
 	go get github.com/aktau/github-release
 	go get github.com/alecthomas/gometalinter
-	go get -v -d gobu
+	go get -v -d gobu/cmd/gobu
 	bin/gometalinter --install --update
 
 clean:
@@ -20,10 +19,10 @@ lint:
 	find src/gobu -name '*.go' | xargs gofmt -w -s
 
 build:
-	env GOOS=linux GOARCH=arm go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Linux-armv7l gobu
-	env GOOS=linux GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Linux-x86_64 gobu
-	env GOOS=darwin GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Darwin-x86_64 gobu
-	env GOOS=windows GOARCH=amd64 go build --ldflags '-w -X main.globalVersion=$(GOVERSION)' -o gobu-Windows-x86_64.exe gobu
+	env GOOS=linux GOARCH=arm go build --ldflags '-w -X main.build=$(VERSION)' -o gobu-Linux-armv7l gobu/cmd/gobu
+	env GOOS=linux GOARCH=amd64 go build --ldflags '-s -w -X main.build=$(VERSION)' -o gobu-Linux-x86_64 gobu/cmd/gobu
+	env GOOS=darwin GOARCH=amd64 go build --ldflags '-w -X main.build=$(VERSION)' -o gobu-Darwin-x86_64 gobu/cmd/gobu
+	env GOOS=windows GOARCH=amd64 go build --ldflags '-w -X main.build=$(VERSION)' -o gobu-Windows-x86_64.exe gobu/cmd/gobu
 
 install:
 	sudo mv gobu-`uname -s`-`uname -m` /usr/local/bin/gobu
