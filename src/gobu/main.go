@@ -4,10 +4,12 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"time"
 
 	"github.com/gpahal/shlex"
 	"github.com/mitchellh/go-ps"
@@ -125,6 +127,19 @@ func run(version, cmd string, cmdArgs []string) *os.ProcessState {
 	return state
 }
 
+func manageLatestVersion(globalVersion *string) {
+	url := "https://golang.org/dl/"
+	client := http.Client{
+		Timeout: time.Duration(5 * time.Second),
+	}
+	resp, _ := client.Get(url)
+	versions := versions(resp)
+	currentVersion := latestVersion(versions)
+	if currentVersion != "" {
+		*globalVersion = currentVersion
+	}
+}
+
 func main() {
 	flag.Parse()
 	arch := runtime.GOARCH
@@ -132,6 +147,8 @@ func main() {
 	if arch == "arm" {
 		arch = "armv6l"
 	}
+
+	manageLatestVersion(&globalVersion)
 
 	extension := unixExtension
 

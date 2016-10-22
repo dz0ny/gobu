@@ -7,6 +7,9 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
+
+	"golang.org/x/net/html"
 )
 
 func download(version string, extension string) {
@@ -37,4 +40,66 @@ func download(version string, extension string) {
 	} else {
 		log.Printf("Skipping download")
 	}
+}
+
+func versions(response *http.Response) []string {
+
+	basePath := "//storage.googleapis.com/golang/"
+	suffix := "src.tar.gz"
+	versions := []string{}
+	tokenizer := html.NewTokenizer(response.Body)
+
+	for {
+
+		next := tokenizer.Next()
+
+		switch {
+
+		case next == html.ErrorToken:
+			return versions
+
+		case next == html.StartTagToken:
+
+			token := tokenizer.Token()
+
+			if token.Data == "a" {
+
+			tokenLoop:
+				for _, element := range token.Attr {
+
+					val := element.Val
+
+					if strings.Contains(val, basePath) {
+						if strings.Contains(val, suffix) {
+
+							parts := strings.Split(val, "/")
+
+							if len(parts) >= 5 {
+
+								name := parts[4]
+								name = strings.TrimLeft(name, "go")
+								name = strings.TrimRight(name, "."+suffix)
+
+								for _, v := range versions {
+									if v == name {
+										break tokenLoop
+									}
+								}
+								versions = append(versions, name)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return versions
+}
+
+func latestVersion(versions []string) string {
+	if len(versions) > 0 {
+		return versions[0]
+	}
+	return ""
 }
