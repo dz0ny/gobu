@@ -24,6 +24,8 @@ _testmain.go
 *.prof
 bin
 pkg
-src/gobu/src/*
-src/gobu/gobu
-src/gobu/gobu-*
+src/gobu/vendor
+src/github.com
+src/golang.org
+src/gopkg.in
+src/sourcegraph.com

@@ -1,16 +1,18 @@
-package main
+package archive
 
 import (
 	"archive/tar"
 	"compress/gzip"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-func untar(source, target string) {
+// Untar unpacks tar.gz archive
+func Untar(source, target string) error {
 
 	file, err := os.Open(source)
 
@@ -40,7 +42,7 @@ func untar(source, target string) {
 			if err == io.EOF {
 				break
 			}
-			log.Fatal(err)
+			return err
 		}
 
 		// get the individual filename and extract to the current directory
@@ -49,20 +51,20 @@ func untar(source, target string) {
 		switch header.Typeflag {
 		case tar.TypeDir:
 			// handle directory
-			log.Println("Creating directory :", filename)
+			log.Debugln("Creating directory :", filename)
 			err = os.MkdirAll(filename, os.FileMode(header.Mode)) // or use 0755 if you prefer
 
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 
 		case tar.TypeReg:
 			// handle normal file
-			log.Println("Untarring :", filename)
+			log.Debugln("Untarring :", filename)
 			writer, err := os.Create(filename)
 
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 
 			io.Copy(writer, tarBallReader)
@@ -70,7 +72,7 @@ func untar(source, target string) {
 			err = os.Chmod(filename, os.FileMode(header.Mode))
 
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 
 			writer.Close()
@@ -78,5 +80,5 @@ func untar(source, target string) {
 			log.Printf("Unable to untar type : %c in file %s", header.Typeflag, filename)
 		}
 	}
-
+	return nil
 }
