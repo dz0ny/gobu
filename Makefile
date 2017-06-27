@@ -1,22 +1,50 @@
-VERSION := 0.7.2
+VERSION := 0.7.3
+APP_NAME := gobu
 
-all: setup build lint
+sync:
+	cd src/$(APP_NAME); glide install
 
-setup:
+update:
+	cd src/$(APP_NAME); glide up
+
+deps:
 	go get github.com/aktau/github-release
-	go get github.com/alecthomas/gometalinter
-	go get -v -d gobu/cmd/gobu
+	go get -u github.com/axw/gocov/gocov
+	go get -u github.com/laher/gols/cmd/...
+	go get -u github.com/Masterminds/glide
+	go get -u github.com/alecthomas/gometalinter
+	go get -u github.com/mjibson/esc
 	bin/gometalinter --install --update
+	go get -t $(APP_NAME)/... # install test packages
+
 
 clean:
-	rm -f gobu
+	rm -f $(APP_NAME)
 	rm -rf pkg
 	rm -rf bin
-	find src/* -maxdepth 0 ! -name 'gobu' -type d | xargs rm -rf
-
+	find src/* -maxdepth 0 ! -name '$(APP_NAME)' -type d | xargs rm -rf
+	rm -rf src/$(APP_NAME)/vendor/
+	 
 lint:
-	bin/gometalinter --fast --disable=gotype --disable=gas --cyclo-over=15 src/gobu/...
-	find src/gobu -name '*.go' | xargs gofmt -w -s
+	bin/gometalinter --fast --disable=gotype --disable=gosimple --disable=ineffassign --disable=dupl --disable=gas --cyclo-over=30 --deadline=60s --exclude $(shell pwd)/src/$(APP_NAME)/vendor src/$(APP_NAME)/...
+	find src/$(APP_NAME) -not -path "./src/$(APP_NAME)/vendor/*" -name '*.go' | xargs gofmt -w -s
+
+test: lint cover
+	go test -v -race $(shell go-ls $(APP_NAME)/...)
+
+cover:
+	gocov test $(shell go-ls $(APP_NAME)/...) | gocov report
+
+editor:
+	go get -u -v github.com/nsf/gocode
+	go get -u -v github.com/rogpeppe/godef
+	go get -u -v github.com/golang/lint/golint
+	go get -u -v github.com/lukehoban/go-outline
+	go get -u -v sourcegraph.com/sqs/goreturns
+	go get -u -v golang.org/x/tools/cmd/gorename
+	go get -u -v github.com/tpng/gopkgs
+	go get -u -v github.com/newhook/go-symbols
+	go get -u -v golang.org/x/tools/cmd/guru
 
 build:
 	env GOOS=linux GOARCH=arm go build --ldflags '-w -X main.build=$(VERSION)' -o gobu-Linux-armv7l gobu/cmd/gobu
@@ -29,11 +57,11 @@ install:
 
 upload:
 	bin/github-release upload \
-			--user dz0ny \
-			--repo gobu \
-			--tag "v$(VERSION)" \
-			--name "gobu-Linux-armv6l" \
-			--file gobu-Linux-armv7l
+		--user dz0ny \
+		--repo gobu \
+		--tag "v$(VERSION)" \
+		--name "gobu-Linux-armv6l" \
+		--file gobu-Linux-armv7l
 	bin/github-release upload \
 	    --user dz0ny \
 	    --repo gobu \
@@ -58,3 +86,5 @@ upload:
 	    --tag "v$(VERSION)" \
 	    --name "gobu-Windows-x86_64.exe" \
 	    --file gobu-Windows-x86_64.exe
+
+all: deps sync build test

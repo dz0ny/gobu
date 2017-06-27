@@ -21,12 +21,13 @@ type Version struct {
 	hash      string
 	os        string
 	arch      string
+	beta      bool
 	Release   string
 }
 
 func (v *Version) parseVersion() error {
 	// `go1.7.3.windows-amd64.zip`
-	var re = regexp.MustCompile(`go([\.\d]+)\.(\w+)-(\w+)\.`)
+	var re = regexp.MustCompile(`go([\.\d\w]+)\.(\w+)-(\w+)\.`)
 
 	for _, match := range re.FindAllStringSubmatch(v.name, 1) {
 		v.Release = match[1]
@@ -34,7 +35,7 @@ func (v *Version) parseVersion() error {
 		v.arch = match[3]
 		return nil
 	}
-	return errors.New("Faield parsing version")
+	return errors.New("Failed parsing version")
 }
 
 // Compatible filter for compatible versions

@@ -1,0 +1,6 @@
+#!/bin/bash
+export GOPATH=$TRAVIS_BUILD_DIR
+export GOBIN="$GOPATH/bin"
+export PATH="$GOPATH/bin:$PATH"
+export GO15VENDOREXPERIMENT=1
+exec "/usr/bin/make" "$@"

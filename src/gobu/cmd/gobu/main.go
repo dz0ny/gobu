@@ -131,6 +131,8 @@ func main() {
 	app.Version(build)
 	cmd := kingpin.MustParse(app.Parse(os.Args[1:]))
 
+	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true})
+
 	if *showVerbose {
 		log.SetLevel(log.DebugLevel)
 		log.Debug("Debug mode enabled")
@@ -141,7 +143,7 @@ func main() {
 	switch cmd {
 	case "versions":
 		r.Update()
-		fmt.Println("List of supported Golang releases for this platform:")
+		fmt.Println("List of supported Go lang releases for this platform:")
 		for _, v := range r.Versions {
 			fmt.Println(v.String())
 		}

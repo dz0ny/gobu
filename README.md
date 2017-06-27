@@ -1,5 +1,5 @@
 # gobu
-[![wercker status](https://app.wercker.com/status/db2136ecdcb6c98f23d442af3d42e7d8/m "wercker status")](https://app.wercker.com/project/bykey/db2136ecdcb6c98f23d442af3d42e7d8)
+[![Build Status](https://travis-ci.org/dz0ny/gobu.svg?branch=master)](https://travis-ci.org/dz0ny/gobu)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dz0ny/gobu)](https://goreportcard.com/report/github.com/dz0ny/gobu)
 
 Painless bootstrapping of GOlang. It downloads and installs GO for your OS
@@ -32,7 +32,7 @@ Commands:
 You can find compiled binaries for your platform under "Releases" or if you prefer quick install:
 
 ```
-$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.2/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
+$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.3/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
 $ chmod +x /usr/local/bin/gobu
 ```
 

@@ -1,0 +1,19 @@
+package: gobu
+import:
+- package: github.com/Sirupsen/logrus
+  version: ^1.0.0
+- package: github.com/anisus/query
+- package: github.com/levigross/grequests
+  version: ^0.9.0
+- package: github.com/mitchellh/go-ps
+- package: golang.org/x/net
+  subpackages:
+  - html
+  - html/atom
+- package: gopkg.in/alecthomas/kingpin.v2
+  version: ^2.2.4
+testImport:
+- package: github.com/stretchr/testify
+  version: ^1.1.4
+  subpackages:
+  - assert

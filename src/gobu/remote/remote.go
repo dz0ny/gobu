@@ -29,7 +29,7 @@ func (r *Remote) GetVersion(release string) (Version, error) {
 			return v, nil
 		}
 	}
-	return Version{}, errors.New("Release not found.")
+	return Version{}, errors.New("release not found")
 }
 
 // Update fetches and updates version's for current GOOS and GOARCH
@@ -75,7 +75,9 @@ func (r *Remote) parseDownloads(data string) []Version {
 				remoteURL: a.Attr("href"),
 				hash:      hash,
 				name:      a.Text(),
+				beta:      strings.Contains(a.Text(), "beta"),
 			}
+
 			if err = version.parseVersion(); err == nil {
 				versions = append(versions, version)
 			}
