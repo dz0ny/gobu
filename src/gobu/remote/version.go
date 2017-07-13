@@ -43,7 +43,7 @@ func (v *Version) Compatible() bool {
 
 	// handle different naming for arm
 	os := runtime.GOOS
-	if os == "arm" {
+	if strings.Contains(os, "arm") {
 		os = "armv6l"
 	}
 	isOS := os == v.os
