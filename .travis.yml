@@ -2,7 +2,7 @@ language: go
 sudo: false
 dist: trusty
 go:
-    - 1.8.3
+    - 1.9.3
 script:
 - ".travis/make all"
 after_success:
