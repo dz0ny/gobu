@@ -73,19 +73,19 @@ func (v *Version) Setup(rootDir string) error {
 			return err
 		}
 
-		log.Infoln("Starting download of ", v.String())
+		log.Infoln("Starting download of", v.String())
 		err = resp.DownloadToFile(targetFile)
 		if err != nil {
 			return err
 		}
-		log.Infoln("Starting extraction of ", targetFile)
+		log.Infoln("Starting extraction of", targetFile)
 		if strings.HasSuffix(v.name, ".zip") {
 			return archive.Unzip(targetFile, sdkRoot)
 		}
 		if strings.HasSuffix(v.name, ".tar.gz") {
 			return archive.Untar(targetFile, sdkRoot)
 		}
-		return errors.New("Unsuported archive type")
+		return errors.New("Unsupported archive type")
 
 	}
 	return nil

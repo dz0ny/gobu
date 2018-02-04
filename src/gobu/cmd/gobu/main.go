@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gobu/remote"
+	"gobu/version"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,8 +13,6 @@ import (
 	ps "github.com/mitchellh/go-ps"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
-
-var build = "dev"
 
 var app = kingpin.New("gobu", "Bootstrap your GOlang enviroment")
 var showVerbose = app.Flag("debug", "Verbose mode.").Bool()
@@ -128,7 +127,7 @@ func run(version, cmd string, cmdArgs []string) *os.ProcessState {
 
 func main() {
 	app.Author("dz0ny")
-	app.Version(build)
+	app.Version(version.String())
 	cmd := kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true})

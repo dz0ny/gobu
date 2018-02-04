@@ -32,7 +32,7 @@ Commands:
 You can find compiled binaries for your platform under "Releases" or if you prefer quick install:
 
 ```
-$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.3/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
+$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.5/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
 $ chmod +x /usr/local/bin/gobu
 ```
 
@@ -41,7 +41,7 @@ $ chmod +x /usr/local/bin/gobu
 ```
 $ mkdir -p project/src/hello_world
 $ cd project
-$ gobu
+$ gobu shell --version=1.9.3 or 1.10rc1
 2016/08/25 09:55:52 >> You are now in a new GOBU shell. To exit, type 'exit'
 2016/08/25 09:55:52 GOPATH /home/dz0ny/project
 2016/08/25 09:55:52 GOROOT /home/dz0ny/.gobu/1.7/go
