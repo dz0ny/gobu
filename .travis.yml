@@ -2,8 +2,13 @@ language: go
 sudo: false
 dist: trusty
 go:
-    - 1.9.3
+    - 1.11.2
 script:
-- ".travis/make all"
-after_success:
-- ".travis/make upload"
+- ".travis/make build test"
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ".travis/make build upload"
+    on:
+      tags: true

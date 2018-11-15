@@ -1,14 +1,16 @@
 # gobu
+
 [![Build Status](https://travis-ci.org/dz0ny/gobu.svg?branch=master)](https://travis-ci.org/dz0ny/gobu)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dz0ny/gobu)](https://goreportcard.com/report/github.com/dz0ny/gobu)
 
 Painless bootstrapping of GOlang. It downloads and installs GO for your OS
 and architecture, sets GOROOT, GOPATH and runs default shell or your command.
-```
+
+```shell
 Usage of gobu:
 usage: gobu [<flags>] <command> [<args> ...]
 
-Bootstrap your GOlang enviroment
+Bootstrap your golang environment
 
 Flags:
   --help     Show context-sensitive help (also try --help-long and --help-man).
@@ -20,19 +22,17 @@ Commands:
     Show help.
 
   shell* [<flags>]
-    Start a shell with Golang enviroment.
+    Start a shell with Golang environment.
 
   versions
     List of all supported Golang releases.
-
-
 
 ```
 
 You can find compiled binaries for your platform under "Releases" or if you prefer quick install:
 
 ```
-$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.7.5/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
+$ curl -L https://github.com/dz0ny/gobu/releases/download/v0.8.0/gobu-`uname -s`-`uname -m` > /usr/local/bin/gobu
 $ chmod +x /usr/local/bin/gobu
 ```
 
@@ -64,11 +64,12 @@ $ tree
 
 ```
 
-
 ## What it does
+
 Downloads latest version from releases and runs it in shell. After the GO is
 bootstrapped you will end up in shell with "Vendoring" enabled and with fresh
 env set up for you.
 
 ## Why
+
 Because I hate setting environment every time for every project(not library).

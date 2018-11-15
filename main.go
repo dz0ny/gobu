@@ -2,30 +2,34 @@ package main
 
 import (
 	"fmt"
-	"gobu/remote"
-	"gobu/version"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/dz0ny/gobu/version"
+
+	"github.com/dz0ny/gobu/remote"
+
 	ps "github.com/mitchellh/go-ps"
+	log "github.com/sirupsen/logrus"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
-var app = kingpin.New("gobu", "Bootstrap your GOlang enviroment")
+var app = kingpin.New("gobu", "Bootstrap your golang environment")
 var showVerbose = app.Flag("debug", "Verbose mode.").Bool()
+var mod = app.Flag("mod", "Enable modules(GO111MODULE=on)").Bool()
 
-var shell = app.Command("shell", "Start a shell with Golang enviroment.").Default()
+var shell = app.Command("shell", "Start a shell with Golang environment.").Default()
 var shellVersion = shell.Flag("release", "Override Golang version used in new shell").String()
-
-var versions = app.Command("versions", "List of all supported Golang releases.")
 
 var goPath = ""
 var envPath = ".gobu"
 
 func init() {
+
+	app.Command("versions", "List all remote golang versions")
+
 	p, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
@@ -43,11 +47,6 @@ func userHomeDir() string {
 		return home
 	}
 	return os.Getenv("HOME")
-}
-
-func createStore(version string) {
-	os.MkdirAll(filepath.Join(envPath, version), 0755)
-	os.MkdirAll(filepath.Join(envPath, version, "local"), 0755)
 }
 
 func runShell(version string) {
@@ -99,7 +98,12 @@ func run(version, cmd string, cmdArgs []string) *os.ProcessState {
 	}
 	goroot := filepath.Join(envPath, version, "go")
 
-	os.Setenv("GO15VENDOREXPERIMENT", "1")
+	if *mod {
+		os.Setenv("GO111MODULE", "on")
+		goPath = filepath.Join(envPath, "global")
+		log.Println("Go Module support is enabled")
+	}
+
 	os.Setenv("GOPATH", goPath)
 	log.Println("GOPATH", goPath)
 	os.Setenv("GOROOT", goroot)
@@ -146,7 +150,6 @@ func main() {
 		for _, v := range r.Versions {
 			fmt.Println(v.String())
 		}
-		break
 	case "shell":
 
 		if *shellVersion != "" {

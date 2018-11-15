@@ -3,15 +3,16 @@ package remote
 import (
 	"errors"
 	"fmt"
-	"gobu/archive"
 	"os"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/dz0ny/gobu/archive"
+
 	req "github.com/levigross/grequests"
+	log "github.com/sirupsen/logrus"
 )
 
 // Version holds status about Golang download
@@ -59,7 +60,9 @@ func (v *Version) String() string {
 // Setup download selected version to target dir and unpacks it
 func (v *Version) Setup(rootDir string) error {
 	sdkRoot := filepath.Join(rootDir, v.Release)
-	os.MkdirAll(sdkRoot, 0755)
+	if err := os.MkdirAll(sdkRoot, 0755); err != nil {
+		return err
+	}
 	targetFile := filepath.Join(rootDir, v.name)
 
 	if _, err := os.Stat(targetFile); os.IsNotExist(err) {

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Untar unpacks tar.gz archive
@@ -60,18 +60,17 @@ func Untar(source, target string) error {
 
 		case tar.TypeReg:
 			// handle normal file
-			log.Debugln("Untarring :", filename)
+			log.Debugln("Un-tarring :", filename)
 			writer, err := os.Create(filename)
-
 			if err != nil {
 				return err
 			}
 
-			io.Copy(writer, tarBallReader)
+			if _, err = io.Copy(writer, tarBallReader); err != nil {
+				return err
+			}
 
-			err = os.Chmod(filename, os.FileMode(header.Mode))
-
-			if err != nil {
+			if err = os.Chmod(filename, os.FileMode(header.Mode)); err != nil {
 				return err
 			}
 

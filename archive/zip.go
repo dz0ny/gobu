@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Unzip unpacks .zip archive
@@ -31,7 +31,9 @@ func Unzip(source, target string) error {
 		path := filepath.Join(target, file.Name)
 		if file.FileInfo().IsDir() {
 			log.Debugln("Creating directory :", file.Name)
-			os.MkdirAll(path, file.Mode())
+			if err := os.MkdirAll(path, file.Mode()); err != nil {
+				return err
+			}
 			continue
 		}
 

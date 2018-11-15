@@ -1,6 +1,7 @@
 #!/bin/bash
-export GOPATH=$TRAVIS_BUILD_DIR
+export GOPATH="$HOME/.gobu/global"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOPATH/bin:$PATH"
-export GO15VENDOREXPERIMENT=1
+export GO111MODULE=on
+mkdir -p $GOPATH
 exec "/usr/bin/make" "$@"
