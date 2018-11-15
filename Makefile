@@ -1,4 +1,4 @@
-VERSION := 0.8.0
+VERSION := 0.8.1
 PKG := gobu
 MODULE := github.com/dz0ny/gobu
 COMMIT := $(shell git rev-parse HEAD)
@@ -63,13 +63,13 @@ clean:
 
 lint: bin/golangci-lint
 	bin/golangci-lint run
-	go fmt
+	go fmt ./...
 
 test: lint cover
-	go test -v -race
+	go test -v -race ./...
 
 cover: bin/gocov
-	gocov test | gocov report
+	bin/gocov test ./... | bin/gocov report
 
 upload: bin/github-release
 	$(call ghupload,Linux-armv7l)
